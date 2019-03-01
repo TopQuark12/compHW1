@@ -8,6 +8,7 @@
  */
 
 /**
+ * Compliling and running the program
  * g++ -o hailstone.o hailstone.cpp -g
  * ./hailstone.o
  */
@@ -18,19 +19,16 @@
 #include <string>
 using namespace std;
 
-#define NUMBERS_IN_A_ROW        8  
+#define NUMBERS_IN_A_ROW        8
 
 typedef vector<int> int_v;
 
-void hailstoneGenerator(int_v *seq)
+void hailstoneGenerator(int_v *seq, int num)
 {
+    seq->push_back(num);
     if (seq->back() == 3)                       //end of sequence, exit                     
         return;
-    if (seq->back() % 2 == 0)
-        seq->push_back(seq->back() / 2);        //even
-    else
-        seq->push_back(seq->back() * 3 + 3);    //odd
-    hailstoneGenerator(seq);                    //recure
+    hailstoneGenerator(seq, seq->back() % 2 == 0 ? seq->back() / 2 : seq->back() * 3 + 3); //recure
 }
 
 /*
@@ -39,8 +37,7 @@ void hailstoneGenerator(int_v *seq)
 void printHailstoneSequence(int n)
 {
     int_v hailstoneSeq;
-    hailstoneSeq.push_back(n);
-    hailstoneGenerator(&hailstoneSeq);
+    hailstoneGenerator(&hailstoneSeq, n);
     for (auto i = hailstoneSeq.begin(); i != hailstoneSeq.end(); i++) 
     {
         cout << *i << '\t';
@@ -55,13 +52,11 @@ void printHailstoneSequence(int n)
  */
 int shortestHailstoneSequenceLength(int start, int end)
 {
-    int_v hailstoneSeq;
     int shortestLength = numeric_limits<int>::max();
     for (int i = start; i < end + 1; i++)
     {
-        hailstoneSeq.clear();                           
-        hailstoneSeq.push_back(i);
-        hailstoneGenerator(&hailstoneSeq);
+        int_v hailstoneSeq;
+        hailstoneGenerator(&hailstoneSeq, i);
         if (hailstoneSeq.size() < shortestLength)
             shortestLength = hailstoneSeq.size();
     }
@@ -73,21 +68,18 @@ int shortestHailstoneSequenceLength(int start, int end)
  */
 void printHistogram(int start, int end)
 {
-    int_v hailstoneSeq;
     string grpString[5];
     for (int i = start; i < end + 1; i++)
     {
-        hailstoneSeq.clear();
-        hailstoneSeq.push_back(i);
-        hailstoneGenerator(&hailstoneSeq);
+        int_v hailstoneSeq;
+        hailstoneGenerator(&hailstoneSeq, i);
         grpString[hailstoneSeq.size() > 40 ? 4 : (hailstoneSeq.size() - 1) / 10].push_back('*');
     }
     for (int i = 0; i < 5; i++)
     {
         if (grpString[i].empty())
-            cout << '0' << '\n';
-        else
-            cout << grpString[i] << '\n';
+            grpString[i].push_back('0');
+        cout << grpString[i] << '\n';
     }
 }
 
