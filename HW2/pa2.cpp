@@ -137,6 +137,8 @@ void makeTriangle(char canvas[MAX_ROW][MAX_COL], int row, int col, int layer)
                 canvas[row][col] = '.';
             return;
         }
+    } else {
+        return;
     }
     makeTriangle(canvas, row - 1, col, layer - 1);
 }
@@ -164,7 +166,7 @@ int fill(char canvas[MAX_ROW][MAX_COL], int row, int col, char fillChar)
 void repeatPattern(char canvas[MAX_ROW][MAX_COL], int row, int col, int interval_row, int interval_col, Shape choice,
                    int patternParameter, int times)
 {
-    if (!pointOutOfRange(row, col) && times > 0)
+    if (times > 0)
     {
         switch(choice) 
         {
